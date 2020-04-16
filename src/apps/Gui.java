@@ -44,13 +44,17 @@ public class Gui extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanelControles = new javax.swing.JPanel();
-        jButtonControlesLeft = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jButtonControlesUp = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jButtonControlesLeft = new javax.swing.JButton();
+        jButtonStop = new javax.swing.JButton();
         jButtonControlesRight = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jButtonControlesDown = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jPanelTop = new javax.swing.JPanel();
         jToggleButtonLuz = new javax.swing.JToggleButton();
         jButtonClaxon = new javax.swing.JButton();
@@ -64,75 +68,52 @@ public class Gui extends javax.swing.JFrame {
         });
 
         jPanelControles.setBorder(javax.swing.BorderFactory.createTitledBorder("Controles"));
-        jPanelControles.setLayout(new java.awt.GridBagLayout());
-
-        jButtonControlesLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/left_arrow.png"))); // NOI18N
-        jButtonControlesLeft.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                botonPulsado(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                botonLiberado(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 14;
-        gridBagConstraints.ipady = 3;
-        jPanelControles.add(jButtonControlesLeft, gridBagConstraints);
+        jPanelControles.setLayout(new java.awt.GridLayout(3, 3));
+        jPanelControles.add(jLabel1);
 
         jButtonControlesUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/up_arrow.png"))); // NOI18N
         jButtonControlesUp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                botonLiberado(evt);
+        });
+        jPanelControles.add(jButtonControlesUp);
+        jPanelControles.add(jLabel2);
+
+        jButtonControlesLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/left_arrow.png"))); // NOI18N
+        jButtonControlesLeft.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                botonPulsado(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 14;
-        gridBagConstraints.ipady = 3;
-        jPanelControles.add(jButtonControlesUp, gridBagConstraints);
+        jPanelControles.add(jButtonControlesLeft);
+
+        jButtonStop.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jButtonStop.setText("STOP");
+        jButtonStop.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                botonPulsado(evt);
+            }
+        });
+        jPanelControles.add(jButtonStop);
 
         jButtonControlesRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/right_arrow.png"))); // NOI18N
         jButtonControlesRight.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                botonLiberado(evt);
-            }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 3;
-        jPanelControles.add(jButtonControlesRight, gridBagConstraints);
+        jPanelControles.add(jButtonControlesRight);
+        jPanelControles.add(jLabel3);
 
         jButtonControlesDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/down_arrow.png"))); // NOI18N
         jButtonControlesDown.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                botonLiberado(evt);
-            }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 14;
-        gridBagConstraints.ipady = 3;
-        jPanelControles.add(jButtonControlesDown, gridBagConstraints);
+        jPanelControles.add(jButtonControlesDown);
+        jPanelControles.add(jLabel4);
 
         getContentPane().add(jPanelControles, java.awt.BorderLayout.CENTER);
 
@@ -172,25 +153,24 @@ public class Gui extends javax.swing.JFrame {
                 s = "IZ"; //IZQUIERDA";
                 break;
             case '6':
-                s = "DER"; //DERECHA";
+                s = "DE"; //DERECHA";
                 break;
             case '5':
-                s = "AT"; //ATRAS";
+                s = "ST"; //STOP";
+                break;
+            case '2':
+                s="AT"; // ATRAS
                 break;
         }
 
         if (!oldMsg.equals(s)) { // Solo enviamos los cambios
-            pw.println(s);
+            pw.println(s);   
+            
         }
         oldMsg = s;
 
 
     }//GEN-LAST:event_botonPulsado
-
-    private void botonLiberado(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_botonLiberado
-        pw.println("ST");
-        oldMsg = "ST";
-    }//GEN-LAST:event_botonLiberado
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
@@ -257,6 +237,11 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JButton jButtonControlesLeft;
     private javax.swing.JButton jButtonControlesRight;
     private javax.swing.JButton jButtonControlesUp;
+    private javax.swing.JButton jButtonStop;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanelControles;
     private javax.swing.JPanel jPanelTop;
     private javax.swing.JToggleButton jToggleButtonLuz;
