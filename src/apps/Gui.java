@@ -5,9 +5,15 @@
  */
 package apps;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,16 +27,28 @@ public class Gui extends javax.swing.JFrame {
     private ServerSocket ss;
     private PrintWriter pw;
     private String oldMsg = "";
+    private HttpURLConnection httpCon;
+    private URL url;
+    private String IP;
 
     /**
      * Creates new form Gui
      */
     public Gui() {
         try {
-            initComponents();          
-            ss = new ServerSocket(3030);
-            Socket s = ss.accept();          
-            pw = new PrintWriter(s.getOutputStream(), true);
+            initComponents();
+            IP = JOptionPane.showInputDialog(this, "Indique IP del Servidor", "Board NodeMcu v3", JOptionPane.INFORMATION_MESSAGE);
+            if (IP.length() == 0) {
+                IP = "192.168.1.131";
+
+            }
+            jTextFieldIP.setText(IP);
+            url = new URL("http://" + IP);
+            httpCon = (HttpURLConnection) url.openConnection();
+            httpCon.setRequestMethod("GET");
+            httpCon.setDoOutput(true);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,6 +76,9 @@ public class Gui extends javax.swing.JFrame {
         jPanelTop = new javax.swing.JPanel();
         jToggleButtonLuz = new javax.swing.JToggleButton();
         jButtonClaxon = new javax.swing.JButton();
+        jPanelDown = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldIP = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Android Conectado!!!");
@@ -136,10 +157,73 @@ public class Gui extends javax.swing.JFrame {
         });
         jPanelTop.add(jButtonClaxon);
 
-        getContentPane().add(jPanelTop, java.awt.BorderLayout.NORTH);
+        getContentPane().add(jPanelTop, java.awt.BorderLayout.SOUTH);
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("IP Server");
+        jPanelDown.add(jLabel5);
+
+        jTextFieldIP.setText("Indique la IP del servidor antes de manipularlo");
+        jPanelDown.add(jTextFieldIP);
+
+        getContentPane().add(jPanelDown, java.awt.BorderLayout.NORTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void enviarDatos(String comando, String accion) {
+        try {
+            //url = new URL("http://" + jTextFieldIP.getText() + "/?comando=" + comando + "&accion=" + accion);
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("comando", comando);
+            parameters.put("accion", accion);
+
+            DataOutputStream out = new DataOutputStream(httpCon.getOutputStream());
+            out.writeBytes(getParamsString(parameters));
+            out.flush();
+            out.close();
+            int responseCode = httpCon.getResponseCode();
+            System.out.println("" + url);
+            System.out.println("GET Response Code :: " + responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                BufferedReader in = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                // print result
+                System.out.println(response.toString());
+            } else {
+                System.out.println("GET request not worked");
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static String getParamsString(Map<String, String> params) {            
+        StringBuilder result = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            try {
+                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+                result.append("&");
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        String resultString = result.toString();
+        return resultString.length() > 0
+                ? resultString.substring(0, resultString.length() - 1)
+                : resultString;
+    }
 
 
     private void botonPulsado(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_botonPulsado
@@ -159,13 +243,13 @@ public class Gui extends javax.swing.JFrame {
                 s = "ST"; //STOP";
                 break;
             case '2':
-                s="AT"; // ATRAS
+                s = "AT"; // ATRAS
                 break;
         }
 
         if (!oldMsg.equals(s)) { // Solo enviamos los cambios
-            pw.println(s);   
-            
+            enviarDatos(s, "void");
+
         }
         oldMsg = s;
 
@@ -182,17 +266,17 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonClaxonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClaxonActionPerformed
-        pw.println("CL");
+        enviarDatos("CL", "void");
         oldMsg = "CL";
     }//GEN-LAST:event_jButtonClaxonActionPerformed
 
     private void jToggleButtonLuzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonLuzActionPerformed
         if (jToggleButtonLuz.isSelected()) {
-            pw.println("LU1");
+            enviarDatos("LU", "1");
             oldMsg = "LU1";
         } else {
-            pw.println("LU0");
-            oldMsg = "LU1";
+            enviarDatos("LU", "0");
+            oldMsg = "LU0";
         }
     }//GEN-LAST:event_jToggleButtonLuzActionPerformed
 
@@ -242,8 +326,11 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanelControles;
+    private javax.swing.JPanel jPanelDown;
     private javax.swing.JPanel jPanelTop;
+    private javax.swing.JTextField jTextFieldIP;
     private javax.swing.JToggleButton jToggleButtonLuz;
     // End of variables declaration//GEN-END:variables
 }
