@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
 
 /**
  *
@@ -23,6 +24,7 @@ public class Gui extends javax.swing.JFrame {
     private DatagramSocket ds;    
     private String oldMsg = "";
     private ThreadEnvio he;
+    private int valueSlider;
 
     public Gui() {
         try {
@@ -56,6 +58,8 @@ public class Gui extends javax.swing.JFrame {
         jPanelTop = new javax.swing.JPanel();
         jToggleButtonLuz = new javax.swing.JToggleButton();
         jButtonClaxon = new javax.swing.JButton();
+        jPanelSur = new javax.swing.JPanel();
+        jSliderWebCam = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Android Conectado!!!");
@@ -136,6 +140,24 @@ public class Gui extends javax.swing.JFrame {
 
         getContentPane().add(jPanelTop, java.awt.BorderLayout.NORTH);
 
+        jPanelSur.setLayout(new java.awt.CardLayout());
+
+        jSliderWebCam.setMajorTickSpacing(1);
+        jSliderWebCam.setMaximum(19);
+        jSliderWebCam.setMinorTickSpacing(1);
+        jSliderWebCam.setPaintTicks(true);
+        jSliderWebCam.setSnapToTicks(true);
+        jSliderWebCam.setToolTipText("");
+        jSliderWebCam.setValue(9);
+        jSliderWebCam.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSliderWebCamStateChanged(evt);
+            }
+        });
+        jPanelSur.add(jSliderWebCam, "card2");
+
+        getContentPane().add(jPanelSur, java.awt.BorderLayout.SOUTH);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -195,6 +217,22 @@ public class Gui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jToggleButtonLuzActionPerformed
 
+    private void jSliderWebCamStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderWebCamStateChanged
+        String aux ="S";
+        int val = jSliderWebCam.getValue();
+        
+        if (valueSlider!=val) { // Solo enviamos los cambios
+            if (val<10) 
+                aux = aux+"0" + val;
+            else
+                aux = aux+val;
+            he.setMensaje(aux);            
+            valueSlider = jSliderWebCam.getValue();
+            System.out.println(aux);
+        }
+        
+    }//GEN-LAST:event_jSliderWebCamStateChanged
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -239,7 +277,9 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanelControles;
+    private javax.swing.JPanel jPanelSur;
     private javax.swing.JPanel jPanelTop;
+    private javax.swing.JSlider jSliderWebCam;
     private javax.swing.JToggleButton jToggleButtonLuz;
     // End of variables declaration//GEN-END:variables
 }
