@@ -175,8 +175,14 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonClaxonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClaxonActionPerformed
-        he.setMensaje("CL");   
-        oldMsg = "CL";
+        try {
+            he.setMensaje("CL1");
+            Thread.sleep(100);
+            he.setMensaje("CL0");
+            oldMsg = "CL";
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonClaxonActionPerformed
 
     private void jToggleButtonLuzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonLuzActionPerformed
@@ -189,9 +195,6 @@ public class Gui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jToggleButtonLuzActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

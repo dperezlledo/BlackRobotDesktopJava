@@ -31,7 +31,7 @@ public class ThreadEnvio implements Runnable {
         }
     }
 
-    public void setMensaje(String msg) {
+    public void setMensaje(String msg) {       
         this.msg = msg.getBytes();
     }
 
