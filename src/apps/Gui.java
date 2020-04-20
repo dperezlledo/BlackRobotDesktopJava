@@ -18,29 +18,31 @@ import javax.swing.JSlider;
  * @author David
  */
 public class Gui extends javax.swing.JFrame {
+
     public static final int PORT = 3030;
     public static final String IP_FIJA = "192.168.1.131";
     private String IP;
-    private DatagramSocket ds;    
+    private DatagramSocket ds;
     private String oldMsg = "";
     private ThreadEnvio he;
     private int valueSlider;
 
     public Gui() {
         try {
-            initComponents(); 
-            IP = JOptionPane.showInputDialog(this,"Indique IP del servidor", "NodeMcu v3", JOptionPane.INFORMATION_MESSAGE);
-            if (IP.length()==0) IP = IP_FIJA; // Default IP router fixed
+            initComponents();
+            IP = JOptionPane.showInputDialog(this, "Indique IP del servidor", "NodeMcu v3", JOptionPane.INFORMATION_MESSAGE);
+            if (IP.length() == 0) {
+                IP = IP_FIJA; // Default IP router fixed
+            }
             ds = new DatagramSocket(PORT);
             he = new ThreadEnvio(IP, 250);
             he.setMensaje("ST");
-            new Thread(he).start();            
+            new Thread(he).start();
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -50,7 +52,7 @@ public class Gui extends javax.swing.JFrame {
         jButtonControlesUp = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButtonControlesLeft = new javax.swing.JButton();
-        jButtonStop = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         jButtonControlesRight = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButtonControlesDown = new javax.swing.JButton();
@@ -78,6 +80,9 @@ public class Gui extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                botonLiberado(evt);
+            }
         });
         jPanelControles.add(jButtonControlesUp);
         jPanelControles.add(jLabel2);
@@ -87,22 +92,25 @@ public class Gui extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                botonLiberado(evt);
+            }
         });
         jPanelControles.add(jButtonControlesLeft);
 
-        jButtonStop.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jButtonStop.setText("STOP");
-        jButtonStop.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                botonPulsado(evt);
-            }
-        });
-        jPanelControles.add(jButtonStop);
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 153, 51));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("X");
+        jPanelControles.add(jLabel5);
 
         jButtonControlesRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/right_arrow.png"))); // NOI18N
         jButtonControlesRight.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                botonLiberado(evt);
             }
         });
         jPanelControles.add(jButtonControlesRight);
@@ -112,6 +120,9 @@ public class Gui extends javax.swing.JFrame {
         jButtonControlesDown.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 botonPulsado(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                botonLiberado(evt);
             }
         });
         jPanelControles.add(jButtonControlesDown);
@@ -175,10 +186,7 @@ public class Gui extends javax.swing.JFrame {
                 s = "DE"; //DERECHA";
                 break;
             case '5':
-                s = "ST"; //STOP";
-                break;
-            case '2':
-                s="AT"; // ATRAS
+                s = "AT"; // ATRAS
                 break;
         }
 
@@ -192,7 +200,7 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_botonPulsado
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        he.cerrarConexion();        
+        he.cerrarConexion();
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonClaxonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClaxonActionPerformed
@@ -217,20 +225,28 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButtonLuzActionPerformed
 
     private void jSliderWebCamStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderWebCamStateChanged
-        String aux ="X";
+        String aux = "X";
         int val = jSliderWebCam.getValue();
-        
-        if (valueSlider!=val) { // Solo enviamos los cambios
-            if (val<10) 
-                aux = aux+"0" + val;
-            else
-                aux = aux+val;
-            he.setMensaje(aux);            
+
+        if (valueSlider != val) { // Solo enviamos los cambios
+            if (val < 10) {
+                aux = aux + "0" + val;
+            } else {
+                aux = aux + val;
+            }
+            he.setMensaje(aux);
             valueSlider = jSliderWebCam.getValue();
             System.out.println(aux);
         }
-        
+
     }//GEN-LAST:event_jSliderWebCamStateChanged
+
+    private void botonLiberado(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_botonLiberado
+        he.setMensaje("ST");
+        System.out.println("ST");
+
+        oldMsg = "ST";
+    }//GEN-LAST:event_botonLiberado
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -270,11 +286,11 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JButton jButtonControlesLeft;
     private javax.swing.JButton jButtonControlesRight;
     private javax.swing.JButton jButtonControlesUp;
-    private javax.swing.JButton jButtonStop;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanelControles;
     private javax.swing.JPanel jPanelSur;
     private javax.swing.JPanel jPanelTop;
