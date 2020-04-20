@@ -142,13 +142,12 @@ public class Gui extends javax.swing.JFrame {
 
         jPanelSur.setLayout(new java.awt.CardLayout());
 
-        jSliderWebCam.setMajorTickSpacing(1);
-        jSliderWebCam.setMaximum(19);
-        jSliderWebCam.setMinorTickSpacing(1);
+        jSliderWebCam.setMajorTickSpacing(10);
+        jSliderWebCam.setMaximum(99);
+        jSliderWebCam.setMinorTickSpacing(5);
         jSliderWebCam.setPaintTicks(true);
-        jSliderWebCam.setSnapToTicks(true);
         jSliderWebCam.setToolTipText("");
-        jSliderWebCam.setValue(9);
+        jSliderWebCam.setValue(50);
         jSliderWebCam.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSliderWebCamStateChanged(evt);
@@ -218,7 +217,7 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButtonLuzActionPerformed
 
     private void jSliderWebCamStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderWebCamStateChanged
-        String aux ="S";
+        String aux ="X";
         int val = jSliderWebCam.getValue();
         
         if (valueSlider!=val) { // Solo enviamos los cambios
